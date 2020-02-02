@@ -1,45 +1,45 @@
 clear;
 
-hos_nums = 62 % Ò½ÔºµÄ×ÜÊıÁ¿
+hos_nums = 62 % åŒ»é™¢çš„æ€»æ•°é‡
 distance = 100*rand(hos_nums);
 distance = distance+distance';
 
-t_h = 5 ;% Ä¿±êÒ½ÔºµÄÊıÁ¿
+t_h = 5 ;% ç›®æ ‡åŒ»é™¢çš„æ•°é‡
 
 
 
 
 %%
-%µÚÒ»²½£º½â¿Õ¼ä±àÂë£¬Ê¹ÓÃ¶ş½øÖÆ±àÂë·½°¸
+%ç¬¬ä¸€æ­¥ï¼šè§£ç©ºé—´ç¼–ç ï¼Œä½¿ç”¨äºŒè¿›åˆ¶ç¼–ç æ–¹æ¡ˆ
 
 solution_space = nchoosek(hos_nums,t_h);
 binary_bits = get_binary_bits(solution_space);
 solution_combinations  = nchoosek(1:hos_nums,t_h);
 %%
-%²ÎÊıÉèÖÃ
-population_size = 1000;      % ÖÖÈº´óĞ¡
-chromosome_size = binary_bits;       % È¾É«Ìå³¤¶È
-generation_size = 200;      % ×î´óµü´ú´ÎÊı
-cross_rate = 0.25;           % ½»²æ¸ÅÂÊ
-mutate_rate = 0.01;         % ±äÒì¸ÅÂÊ
+%å‚æ•°è®¾ç½®
+population_size = 1000;      % ç§ç¾¤å¤§å°
+chromosome_size = binary_bits;       % æŸ“è‰²ä½“é•¿åº¦
+generation_size = 200;      % æœ€å¤§è¿­ä»£æ¬¡æ•°
+cross_rate = 0.25;           % äº¤å‰æ¦‚ç‡
+mutate_rate = 0.01;         % å˜å¼‚æ¦‚ç‡
 
 
 %%
-%µÚ¶ş²½£º³õÊ¼»¯ÖÖÈº
+%ç¬¬äºŒæ­¥ï¼šåˆå§‹åŒ–ç§ç¾¤
 
 for i=1:population_size
     population_index(i) = round(solution_space*rand());
     population_chrome{i} = dec2base(population_index(i),2,chromosome_size);
-    
+
 end
 
-% ËùÓĞÖÖÈº¸öÌåÊÊÓ¦¶È³õÊ¼»¯Îª0
+% æ‰€æœ‰ç§ç¾¤ä¸ªä½“é€‚åº”åº¦åˆå§‹åŒ–ä¸º0
 for i=1:population_size
-    fitness_value(i) = 0.;    
+    fitness_value(i) = 0.;
 end
 
-%ÒÅ´«½ø»¯¿ªÊ¼
-best_fitness=0;
+%é—ä¼ è¿›åŒ–å¼€å§‹
+best_fitness=-999999999;
 best_generation=0;
 best_individual=0;
 
@@ -48,16 +48,16 @@ for G = 1:generation_size
         fitness_value(i) = adaptive_score(hos_nums,t_h,distance,population_chrome{i},solution_combinations);
     end
 
-        for i=1:population_size    
+        for i=1:population_size
         fitness_sum(i) = 0.;
     end
 
     min_index = 1;
     temp = 1;
 
-    % ±éÀúÖÖÈº 
-    % Ã°ÅİÅÅĞò
-    % ×îºópopulation(i)µÄÊÊÓ¦¶ÈËæiµİÔö¶øµİÔö£¬population(1)×îĞ¡£¬population(population_size)×î´ó
+    % éå†ç§ç¾¤
+    % å†’æ³¡æ’åº
+    % æœ€åpopulation(i)çš„é€‚åº”åº¦éšié€’å¢è€Œé€’å¢ï¼Œpopulation(1)æœ€å°ï¼Œpopulation(population_size)æœ€å¤§
     for i=1:population_size
         min_index = i;
         for j = i+1:population_size
@@ -67,53 +67,53 @@ for G = 1:generation_size
         end
 
         if min_index ~= i
-            % ½»»» fitness_value(i) ºÍ fitness_value(min_index) µÄÖµ
+            % äº¤æ¢ fitness_value(i) å’Œ fitness_value(min_index) çš„å€¼
             temp = fitness_value(i);
             fitness_value(i) = fitness_value(min_index);
             fitness_value(min_index) = temp;
-            % ´ËÊ± fitness_value(i) µÄÊÊÓ¦¶ÈÔÚ[i,population_size]ÉÏ×îĞ¡
+            % æ­¤æ—¶ fitness_value(i) çš„é€‚åº”åº¦åœ¨[i,population_size]ä¸Šæœ€å°
 
-            % ½»»» population(i) ºÍ population(min_index) µÄÈ¾É«Ìå´®
+            % äº¤æ¢ population(i) å’Œ population(min_index) çš„æŸ“è‰²ä½“ä¸²
             temp=population_chrome{i};
             population_chrome{i}=population_chrome{min_index};
             population_chrome{min_index}=temp;
-      
+
         end
     end
-    
-    % fitness_sum(i) = Ç°i¸ö¸öÌåµÄÊÊÓ¦¶ÈÖ®ºÍ
+
+    % fitness_sum(i) = å‰iä¸ªä¸ªä½“çš„é€‚åº”åº¦ä¹‹å’Œ
     for i=1:population_size
         if i==1
-            fitness_sum(i) = fitness_sum(i) + fitness_value(i);    
+            fitness_sum(i) = fitness_sum(i) + fitness_value(i);
         else
             fitness_sum(i) = fitness_sum(i-1) + fitness_value(i);
         end
     end
 
-    % fitness_average(G) = µÚG´Îµü´ú ¸öÌåµÄÆ½¾ùÊÊÓ¦¶È
+    % fitness_average(G) = ç¬¬Gæ¬¡è¿­ä»£ ä¸ªä½“çš„å¹³å‡é€‚åº”åº¦
     fitness_average(G) = fitness_sum(population_size)/population_size;
 
-    % ¸üĞÂ×î´óÊÊÓ¦¶ÈºÍ¶ÔÓ¦µÄµü´ú´ÎÊı£¬±£´æ×î¼Ñ¸öÌå(×î¼Ñ¸öÌåµÄÊÊÓ¦¶È×î´ó)
+    % æ›´æ–°æœ€å¤§é€‚åº”åº¦å’Œå¯¹åº”çš„è¿­ä»£æ¬¡æ•°ï¼Œä¿å­˜æœ€ä½³ä¸ªä½“(æœ€ä½³ä¸ªä½“çš„é€‚åº”åº¦æœ€å¤§)
     if fitness_value(population_size) > best_fitness
         best_fitness = fitness_value(population_size);
         best_generation = G;
         best_individual=population_chrome{population_size};
     end
-    
-    %Ñ¡Ôñ
+
+    %é€‰æ‹©
     for i=1:population_size
-        r = rand * fitness_sum(population_size);  % Éú³ÉÒ»¸öËæ»úÊı£¬ÔÚ[0,×ÜÊÊÓ¦¶È]Ö®¼ä
+        r = rand * fitness_sum(population_size);  % ç”Ÿæˆä¸€ä¸ªéšæœºæ•°ï¼Œåœ¨[0,æ€»é€‚åº”åº¦]ä¹‹é—´
         first = 1;
         last = population_size;
         mid = round((last+first)/2);
         idx = -1;
-    
-        % ÅÅÖĞ·¨Ñ¡Ôñ¸öÌå
-        while (first <= last) && (idx == -1) 
+
+        % æ’ä¸­æ³•é€‰æ‹©ä¸ªä½“
+        while (first <= last) && (idx == -1)
             if r > fitness_sum(mid)
                 first = mid;
             elseif r < fitness_sum(mid)
-                last = mid;     
+                last = mid;
             else
                 idx = mid;
                 break;
@@ -124,7 +124,7 @@ for G = 1:generation_size
                 break;
             end
         end
-  
+
        population_new{i} = population_chrome{idx};
     end
 
@@ -132,69 +132,64 @@ for G = 1:generation_size
        population_chrome{i} = population_new{i};
     end
 
-    %½»²æ
-    %²½³¤Îª2 ±éÀúÖÖÈº
+    %äº¤å‰
+    %æ­¥é•¿ä¸º2 éå†ç§ç¾¤
     for i=1:2:population_size
-        % rand<½»²æ¸ÅÂÊ£¬¶ÔÁ½¸ö¸öÌåµÄÈ¾É«Ìå´®½øĞĞ½»²æ²Ù×÷
+        % rand<äº¤å‰æ¦‚ç‡ï¼Œå¯¹ä¸¤ä¸ªä¸ªä½“çš„æŸ“è‰²ä½“ä¸²è¿›è¡Œäº¤å‰æ“ä½œ
         if(rand < cross_rate)
             cross_position = round(rand * chromosome_size);
             if (cross_position == 0 || cross_position == 1)
                 continue;
             end
-            % ¶Ô cross_position¼°Ö®ºóµÄ¶ş½øÖÆ´®½øĞĞ½»»»
+            % å¯¹ cross_positionåŠä¹‹åçš„äºŒè¿›åˆ¶ä¸²è¿›è¡Œäº¤æ¢
             raw1=population_chrome{i};
             raw2=population_chrome{i+1};
-            
+
             for j=cross_position:chromosome_size
                 temp = population_chrome{i}(j);
                 population_chrome{i}(j) = population_chrome{i+1}(j);
                 population_chrome{i+1}(j)= temp;
             end
-            
+
             if bin2dec(population_chrome{i})>solution_space
             population_chrome{i}=raw;
             end
-            
+
             if bin2dec(population_chrome{i+1})>solution_space
             population_chrome{i+1}=raw;
             end
-            
-            
+
+
         end
     end
-    %±äÒì
-    
+    %å˜å¼‚
+
     for i=1:population_size
-        
+
     if rand < mutate_rate
-        mutate_position = round(rand*chromosome_size);  % ±äÒìÎ»ÖÃ
-        if mutate_position == 0 
-            % Èô±äÒìÎ»ÖÃÎª0£¬²»±äÒì
+        mutate_position = round(rand*chromosome_size);  % å˜å¼‚ä½ç½®
+        if mutate_position == 0
+            % è‹¥å˜å¼‚ä½ç½®ä¸º0ï¼Œä¸å˜å¼‚
             continue;
         end
-        
+
         raw = population_chrome{i};
-        
+
         if population_chrome{i}(mutate_position)==1
             population_chrome{i}(mutate_position)=0
         end
-        
+
         if population_chrome{i}(mutate_position)==0
             population_chrome{i}(mutate_position)=1
         end
-        
+
         if bin2dec(population_chrome{i})>solution_space
             population_chrome{i}=raw;
         end
-        
+
     end
-        
-    
+
+
     end
-    
+
 end
-
-
-
-
-

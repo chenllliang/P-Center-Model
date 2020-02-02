@@ -1,9 +1,0 @@
-function x = adaptive_score(distance,sample,solution_combinations)
-    index = bin2dec(sample);
-    combination = solution_combinations(index,:);
-    
-    
-    
-    
-
-end
